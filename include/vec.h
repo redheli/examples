@@ -13,6 +13,7 @@
 
 #include <math.h>
 #include <iostream>
+#include <cmath>
 
 const float  DegreesToRadians = static_cast<float>(M_PI / 180.0f);
 

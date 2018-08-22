@@ -2,6 +2,8 @@ cmake_minimum_required (VERSION 2.6)
 
 project (vermilion9)
 
+set(CMAKE_CXX_STANDARD 14)
+
 LINK_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib )
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -28,9 +30,11 @@ else()
 set(COMMON_LIBS vermilion)
 endif()
 
+include(/usr/lib/x86_64-linux-gnu/cmake/glfw3/glfw3Config.cmake)
+
 set(COMMON_HEADERS include/vgl.h include/vapp.h)
 
-set(COMMON_LIBS ${COMMON_LIBS} ${EXTRA_LIBS})
+set(COMMON_LIBS ${COMMON_LIBS} ${EXTRA_LIBS} glfw)
 
 add_library(vermilion
             lib/gl3w.c
