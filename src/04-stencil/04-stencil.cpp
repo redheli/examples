@@ -111,6 +111,7 @@ void GouraudExample::OnKey(int key, int scancode, int action, int mods)
 
 void GouraudExample::Display(bool auto_redraw)
 {
+    //https://learnopengl.com/Advanced-OpenGL/Stencil-testing
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |GL_STENCIL_BUFFER_BIT);
 
@@ -118,11 +119,11 @@ void GouraudExample::Display(bool auto_redraw)
 
     // draw sphere where the stencil is 1
     glStencilFunc(GL_ALWAYS, 0x1, 0xFF);
-//    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glStencilMask(0xFF);
     glDrawArrays( GL_TRIANGLES, 3, 6 );
 
     glStencilFunc(GL_EQUAL, 0x1, 0xFF);
-    glStencilMask(0xFF);
+    glStencilMask(0x00); // each bit ends up as 0 in the stencil buffer (disabling writes)
     glDisable(GL_DEPTH_TEST);
     glDrawArrays( GL_TRIANGLES, 0, 3 );
 
