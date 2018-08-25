@@ -47,7 +47,7 @@ void GouraudExample::Initialize(const char * title)
         {{ 255,   0,   0, 255 }, { -0.90f, -0.90f }},  // Triangle 1
         {{   0, 255,   0, 255 }, {  0.85f, -0.90f }},
         {{   0,   0, 255, 255 }, { -0.90f,  0.85f }},
-        {{  10,  10,  10, 255 }, {  0.90f, -0.85f }},  // Triangle 2
+        {{  10,  10,  10, 255 }, {  -0.40f, -0.85f }},  // Triangle 2
         {{ 100, 100, 100, 255 }, {  0.90f,  0.90f }},
         {{ 255, 255, 255, 255 }, { -0.85f,  0.90f }}
     };
@@ -75,6 +75,13 @@ void GouraudExample::Initialize(const char * title)
 
     glEnableVertexAttribArray( vColor );
     glEnableVertexAttribArray( vPosition );
+
+    // Set the stencil's clear value
+    glClearStencil(0xFF);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_ALWAYS, 0x1, 0xFF);
+    glStencilOp(GL_KEEP, GL_REPLACE, GL_REPLACE);
 }
 
 void GouraudExample::OnKey(int key, int scancode, int action, int mods)
@@ -105,10 +112,19 @@ void GouraudExample::OnKey(int key, int scancode, int action, int mods)
 void GouraudExample::Display(bool auto_redraw)
 {
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear( GL_COLOR_BUFFER_BIT );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |GL_STENCIL_BUFFER_BIT);
 
     glBindVertexArray( VAOs[Triangles] );
-    glDrawArrays( GL_TRIANGLES, 0, NumVertices );
+
+    // draw sphere where the stencil is 1
+    glStencilFunc(GL_ALWAYS, 0x1, 0xFF);
+//    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glDrawArrays( GL_TRIANGLES, 3, 6 );
+
+    glStencilFunc(GL_EQUAL, 0x1, 0xFF);
+    glStencilMask(0xFF);
+    glDisable(GL_DEPTH_TEST);
+    glDrawArrays( GL_TRIANGLES, 0, 3 );
 
     // Done
     base::Display();

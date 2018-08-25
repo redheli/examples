@@ -61,6 +61,7 @@ set(EXAMPLES
   04-gouraud
   04-gouraud-float
   04-shadowmap
+  04-stencil
   06-cubemap
   06-load-texture
   06-mipfilters
